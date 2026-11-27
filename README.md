@@ -27,3 +27,17 @@ leaves the function's size and reference count unchanged, so ghidriff's default 
 - CVE-2026-112554, IOStorageFamily: `FUN_fffffff009b770e0` (24A446) ↔ `FUN_fffffff009bb2d60` (24B119). A GPT
   partition-name scan bound changes from 72 to 36 UTF-16 units.
 - CVE-2026-112477, IOSurface: `FUN_fffffff009bae76c` (24A446). A call loses an argument.
+
+## iOS CoreMedia with a fix inside a switch case (arm64e)
+
+The iPhone13,3 CoreMedia dylib from iOS builds 24A446 and 24B119, extracted from each build's dyld shared cache.
+
+| file | SHA-256 |
+| --- | --- |
+| `bins/CoreMedia.iPhone13_3.24A446` | `f959c7178a64bdddd03695e2e786ca812ccd2827dc8dc2378e15e072ef3076b8` |
+| `bins/CoreMedia.iPhone13_3.24B119` | `4da11f3fd8155e7d733151db2a9f98297dac7932a9cacab7e52645b0ec6e1c22` |
+
+- CVE-2026-112688: `_hevcbridgeParseVdrDmDataPayloadExMetadatatBlocks` (24A446) ↔
+  `_hevcbridgeParseVdrDmDataPayloadExMetadataBlocks` (24B119), 5,052 → 5,080 bytes; the new build adds three count
+  checks. The checks sit in the cases of a relative jump table that Ghidra 12.0 and 12.2 don't recover, so without
+  ghidriff's switch repair both bodies end at the switch (944 bytes) and match as identical.
